@@ -514,6 +514,12 @@ void rgblight_sethsv_eeprom_helper(uint8_t hue, uint8_t sat, uint8_t val, bool w
         rgblight_set();
       }
 #endif
+#if defined(RGBLIGHT_EFFECT_WPM_TEMP) && defined(VELOCIKEY_ENABLE)
+	  else if(rgblight_status.base_mode == RGBLIGHT_MODE_WPM_TEMP) {
+		  //green-red, ignore the change of hue
+		  hue = rgblight_config.hue;
+	  }
+#endif
     }
 #ifdef RGBLIGHT_SPLIT
     if( rgblight_config.hue != hue ||
@@ -839,6 +845,12 @@ void rgblight_task(void) {
       effect_func = (effect_func_t)rgblight_effect_alternating;
     }
 #endif
+#if defined(RGBLIGHT_EFFECT_WPM_TEMP) && defined(VELOCIKEY_ENABLE)
+	else if(rgblight_status.base_mode == RGBLIGHT_MODE_WPM_TEMP) {
+		interval_time = 100;
+		effect_func = (effect_func_t)rgblight_effect_wpm_temp;
+	}
+#endif
     if (animation_status.restart) {
       animation_status.restart = false;
       animation_status.last_timer = timer_read() - interval_time - 1;
@@ -1110,5 +1122,23 @@ void rgblight_effect_alternating(animation_status_t *anim) {
   }
   rgblight_set();
   anim->pos = (anim->pos + 1) % 2;
+}
+#endif
+
+#if defined(RGBLIGHT_EFFECT_WPM_TEMP) && defined(VELOCIKEY_ENABLE)
+void rgblight_effect_wpm_temp(animation_status_t *anim) {
+	static uint8_t typing_speed = 0;
+
+	//(slightly) smoother transitions
+	if(typing_speed > get_typing_speed()) {
+		typing_speed--;
+	} else {
+		typing_speed = get_typing_speed();
+	}
+
+	LED_TYPE tmp_led;
+	sethsv(201 - MAX(typing_speed, 80), rgblight_config.sat,
+		   rgblight_config.val, &tmp_led);
+	rgblight_setrgb(tmp_led.r, tmp_led.g, tmp_led.b);
 }
 #endif
