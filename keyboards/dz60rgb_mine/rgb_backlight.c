@@ -15,11 +15,6 @@
  */
 #if RGB_BACKLIGHT_ENABLED
 
-#if defined (RGB_BACKLIGHT_DZ60RGB)
-#else
-#error None of the following was defined: RGB_BACKLIGHT_DZ60RGB
-#endif
-
 #ifndef MAX
     #define MAX(X, Y) ((X) > (Y) ? (X) : (Y))
 #endif
@@ -37,45 +32,39 @@
 #include "hal.h"
 #include "drivers/arm/i2c_master.h"
 #include "tmk_core/common/eeprom.h"
+
 #include "progmem.h"
 #include "quantum/color.h"
 
-#if defined (RGB_BACKLIGHT_DZ60RGB)
 #include "drivers/issi/is31fl3733.h"
-#define BACKLIGHT_LED_COUNT 64
+#define BACKLIGHT_LED_COUNT 63
 
 #define BACKLIGHT_EFFECT_MAX 10
 
-backlight_config g_config =
-{
-	.use_split_backspace = RGB_BACKLIGHT_USE_SPLIT_BACKSPACE,
-	.use_split_left_shift = RGB_BACKLIGHT_USE_SPLIT_LEFT_SHIFT,
-	.use_split_right_shift = RGB_BACKLIGHT_USE_SPLIT_RIGHT_SHIFT,
-	.use_7u_spacebar = RGB_BACKLIGHT_USE_7U_SPACEBAR,
-	.use_iso_enter = RGB_BACKLIGHT_USE_ISO_ENTER,
-	.disable_hhkb_blocker_leds = RGB_BACKLIGHT_DISABLE_HHKB_BLOCKER_LEDS,
-	.disable_when_usb_suspended = RGB_BACKLIGHT_DISABLE_WHEN_USB_SUSPENDED,
-	.disable_after_timeout = RGB_BACKLIGHT_DISABLE_AFTER_TIMEOUT,
-	.brightness = RGB_BACKLIGHT_BRIGHTNESS,
-	.effect = RGB_BACKLIGHT_EFFECT,
-	.effect_speed = RGB_BACKLIGHT_EFFECT_SPEED,
-	.color_1 = RGB_BACKLIGHT_COLOR_1,
-	.color_2 = RGB_BACKLIGHT_COLOR_2,
-	.caps_lock_indicator = RGB_BACKLIGHT_CAPS_LOCK_INDICATOR,
-	.layer_1_indicator = RGB_BACKLIGHT_LAYER_1_INDICATOR,
-	.layer_2_indicator = RGB_BACKLIGHT_LAYER_2_INDICATOR,
-	.layer_3_indicator = RGB_BACKLIGHT_LAYER_3_INDICATOR,
-	.alphas_mods = {
-		RGB_BACKLIGHT_ALPHAS_MODS_ROW_0,
-		RGB_BACKLIGHT_ALPHAS_MODS_ROW_1,
-		RGB_BACKLIGHT_ALPHAS_MODS_ROW_2,
-		RGB_BACKLIGHT_ALPHAS_MODS_ROW_3,
-		RGB_BACKLIGHT_ALPHAS_MODS_ROW_4 },
-#if defined(RGB_BACKLIGHT_M6_B)
-	.custom_color = { { 0, 255 }, { 43, 255 }, { 85, 255 }, { 128, 255 }, { 171, 255 }, { 213, 255 } }
-#endif
+backlight_config g_config = {
+    .use_split_backspace = RGB_BACKLIGHT_USE_SPLIT_BACKSPACE,
+    .use_split_left_shift = RGB_BACKLIGHT_USE_SPLIT_LEFT_SHIFT,
+    .use_split_right_shift = RGB_BACKLIGHT_USE_SPLIT_RIGHT_SHIFT,
+    .use_7u_spacebar = RGB_BACKLIGHT_USE_7U_SPACEBAR,
+    .use_iso_enter = RGB_BACKLIGHT_USE_ISO_ENTER,
+    .disable_hhkb_blocker_leds = RGB_BACKLIGHT_DISABLE_HHKB_BLOCKER_LEDS,
+    .disable_when_usb_suspended = RGB_BACKLIGHT_DISABLE_WHEN_USB_SUSPENDED,
+    .disable_after_timeout = RGB_BACKLIGHT_DISABLE_AFTER_TIMEOUT,
+    .brightness = RGB_BACKLIGHT_BRIGHTNESS,
+    .effect = RGB_BACKLIGHT_EFFECT,
+    .effect_speed = RGB_BACKLIGHT_EFFECT_SPEED,
+    .color_1 = RGB_BACKLIGHT_COLOR_1,
+    .color_2 = RGB_BACKLIGHT_COLOR_2,
+    .caps_lock_indicator = RGB_BACKLIGHT_CAPS_LOCK_INDICATOR,
+    .layer_1_indicator = RGB_BACKLIGHT_LAYER_1_INDICATOR,
+    .layer_2_indicator = RGB_BACKLIGHT_LAYER_2_INDICATOR,
+    .layer_3_indicator = RGB_BACKLIGHT_LAYER_3_INDICATOR,
+    .alphas_mods = {RGB_BACKLIGHT_ALPHAS_MODS_ROW_0,
+                    RGB_BACKLIGHT_ALPHAS_MODS_ROW_1,
+                    RGB_BACKLIGHT_ALPHAS_MODS_ROW_2,
+                    RGB_BACKLIGHT_ALPHAS_MODS_ROW_3,
+                    RGB_BACKLIGHT_ALPHAS_MODS_ROW_4},
 };
-#endif
 
 bool g_suspend_state = false;
 uint8_t g_indicator_state = 0;
@@ -89,22 +78,87 @@ uint8_t g_key_hit[BACKLIGHT_LED_COUNT];
 // Ticks since any key was last hit.
 uint32_t g_any_key_hit = 0;
 
-#if defined(RGB_BACKLIGHT_DZ60RGB)
-
 // This is a 7-bit address, that gets left-shifted and bit 0
 // set to 0 for write, 1 for read (as per I2C protocol)
 // ADDR_2 is not needed. it is here as a dummy
 #define ISSI_ADDR_1 0x50
 #define ISSI_ADDR_2 0x50
 
-//TODO: this can be different for my board will have to check it out later
-const is31_led g_is31_leds[DRIVER_LED_TOTAL] = {
+const is31_led g_is31_leds[DRIVER_LED_TOTAL] =
+{
+    {0, K_14, J_14, L_14},
+	{0, K_13, J_13, L_13},
+	{0, K_12, J_12, L_12},
+    {0, K_11, J_11, L_11},
+	{0, K_10, J_10, L_10},
+	{0, K_9, J_9, L_9},
+    {0, K_8, J_8, L_8},
+    {0, K_7, J_7, L_7},
+    {0, K_6, J_6, L_6},
+    {0, K_5, J_5, L_5},
+    {0, K_4, J_4, L_4},
+    {0, K_3, J_3, L_3},
+    {0, K_2, J_2, L_2},
+    {0, K_1, J_1, L_1},
+    {0, H_14, G_14, I_14},
+    {0, H_13, G_13, I_13},
+	{0, H_12, G_12, I_12},
+	{0, H_11, G_11, I_11},
+    {0, H_10, G_10, I_10},
+	{0, H_9, G_9, I_9},
+    {0, H_8, G_8, I_8},
+    {0, H_7, G_7, I_7},
+    {0, H_6, G_6, I_6},
+    {0, H_5, G_5, I_5},
+    {0, H_4, G_4, I_4},
+    {0, H_3, G_3, I_3},
+	{0, H_2, G_2, I_2},
+    {0, H_1, G_1, I_1},
+    {0, E_14, D_14, F_14},
+	{0, E_12, D_12, F_12},
+    {0, E_11, D_11, F_11},
+	{0, E_10, D_10, F_10},
+	{0, E_9, D_9, F_9},
+    {0, E_8, D_8, F_8},
+    {0, E_7, D_7, F_7},
+    {0, E_6, D_6, F_6},
+    {0, E_5, D_5, F_5},
+    {0, E_4, D_4, F_4},
+    {0, E_3, D_3, F_3},
+    {0, E_2, D_2, F_2},
+    {0, E_1, D_1, F_1},
+    {0, B_14, A_14, C_14},
+    {0, B_13, A_13, C_13},
+	{0, B_11, A_11, C_11},
+	{0, B_10, A_10, C_10},
+    {0, B_9, A_9, C_9},
+    {0, B_8, A_8, C_8},
+    {0, B_7, A_7, C_7},
+    {0, B_6, A_6, C_6},
+    {0, B_5, A_5, C_5},
+    {0, B_4, A_4, C_4},
+    {0, B_3, A_3, C_3},
+    {0, B_2, A_2, C_2},
+    {0, B_1, A_1, C_1},
+    {0, B_15, A_15, C_15},
+	{0, E_13, D_13, F_13},
+	{0, B_12, A_12, C_12},
+    {0, E_15, D_15, F_15},
+	{0, H_15, G_15, I_15},
+	{0, B_16, A_16, C_16},
+    {0, E_16, D_16, F_16},
+	{0, H_16, G_16, I_16},
+	{0, K_16, J_16, L_16},
+};
+
+//const is31_led g_is31_leds[DRIVER_LED_TOTAL] = {
 /* Refer to IS31 manual for these locations
  *   driver
  *   |  R location
  *   |  |      G location
  *   |  |      |      B location
  *   |  |      |      | */
+/*
     {0, B_1,   A_1,   C_1}, //LA1
     {0, E_1,   D_1,   F_1}, //LA2
     {0, H_1,   G_1,   I_1}, //LA3
@@ -168,18 +222,18 @@ const is31_led g_is31_leds[DRIVER_LED_TOTAL] = {
     {0, B_16,  A_16,  C_16}, //LA61
     {0, E_16,  D_16,  F_16}, //LA62
     {0, H_16,  G_16,  I_16}, //LA63
-    {0, K_16,  J_16,  L_16}, //LA64
+    //{0, K_16,  J_16,  L_16}, //LA64
 };
-
+*/
 typedef struct Point {
 	uint8_t x;
 	uint8_t y;
 } Point;
-#endif
+
+
 // index in range 0..71 (LA0..LA17, LB0..LB17, LC0..LC17, LD0..LD17)
 // point values in range x=0..224 y=0..64
 // origin is center of top-left key (i.e Esc)
-#if defined (RGB_BACKLIGHT_DZ60RGB) //TODO: ansi support only for now
 const Point g_map_led_to_point[BACKLIGHT_LED_COUNT] PROGMEM = {
 	// LA1..LA47
 	{0,0}, {4,16}, {6,32}, {10,48}, {16,0}, {24,16}, {28,32}, {36,48}, {32,0}, {40,16}, {44,32}, {52,48},
@@ -193,8 +247,9 @@ const Point g_map_led_to_point[BACKLIGHT_LED_COUNT] PROGMEM = {
 	// LA52..LA60
 	{210,48}, {216,0}, {220,16}, {214,32}, {222,64}, {2,64}, {22,64}, {42,64}, {102,64},
 	{255,255},// LA61 does not exit, dummy
-	{162,64}, {182,64}, {202,64}
+	{162,64}, {182,64}, //{202,64}
 };
+
 const Point g_map_led_to_point_polar[BACKLIGHT_LED_COUNT] PROGMEM = {
 	// LA1..LA47
 	{96,255}, {109,255}, {128,242}, {148,255}, {93,255}, {105,238}, {128,192}, {154,216}, {89,255}, {101,208}, {128,155}, {159,188},
@@ -208,9 +263,8 @@ const Point g_map_led_to_point_polar[BACKLIGHT_LED_COUNT] PROGMEM = {
 	// LA52..LA60
 	{235,255}, {33,255}, {19,255}, {255,233}, {224,255}, {160,255}, {164,255}, {169,255}, {188,255},
 	{255,255},// LA61 does not exit, dummy
-	{209,255}, {215,255}, {220,255}
+	{209,255}, {215,255}, //{220,255}
 };
-#endif
 
 // This may seem counter-intuitive, but it's quite flexible.
 // For each LED, get it's position to decide what color to make it.
@@ -229,7 +283,7 @@ void map_led_to_point( uint8_t index, Point *point )
 			if ( g_config.use_split_backspace )
 				point->x -= 8;
 			break;
-		case 54+7: // LD7A
+	case 54+7: // LD7A
 			if ( !g_config.use_split_right_shift )
 				point->x -= 8;
 			break;
@@ -247,7 +301,7 @@ void map_led_to_point_polar( uint8_t index, Point *point )
 //
 // Maps switch matrix coordinate (row,col) to LED index
 //
-#if defined (RGB_BACKLIGHT_DZ60RGB) //TODO: ansi support only
+//
 // LA1,  LA5,  LA9,  LA13, LA17, LA21, LA25, LA29, LA33, LA37, LA41, LA45, LA49, LA53,
 // LA2,  LA6,  LA10, LA14, LA18, LA22, LA26, LA30, LA34, LA38, LA42, LA46, LA50,  ---,
 // LA3,  LA7,  LA11, LA15, LA19, LA23, LA27, LA31, LA35, LA39, LA43, LA47, LA54, LA55,
@@ -260,7 +314,6 @@ const uint8_t g_map_row_column_to_led[MATRIX_ROWS][MATRIX_COLS] PROGMEM = {
 	{  4-1,  255,  8-1, 12-1, 16-1, 20-1, 24-1, 28-1, 32-1, 36-1, 40-1, 44-1,  255, 52-1 },
 	{ 57-1, 58-1, 59-1,  255,  255,  255, 60-1,  255,  255,  255, 62-1, 63-1, 64-1, 56-1 }
 };
-#endif
 
 void map_row_column_to_led( uint8_t row, uint8_t column, uint8_t *led )
 {
@@ -273,24 +326,18 @@ void map_row_column_to_led( uint8_t row, uint8_t column, uint8_t *led )
 
 void backlight_update_pwm_buffers(void)
 {
-#if defined (RGB_BACKLIGHT_DZ60RGB)
 	IS31FL3733_update_pwm_buffers( ISSI_ADDR_1, ISSI_ADDR_2 );
 	IS31FL3733_update_led_control_registers( ISSI_ADDR_1, ISSI_ADDR_2 );
-#endif
 }
 
 void backlight_set_color( int index, uint8_t red, uint8_t green, uint8_t blue )
 {
-#if defined (RGB_BACKLIGHT_DZ60RGB)
 	IS31FL3733_set_color( index, red, green, blue );
-#endif
 }
 
 void backlight_set_color_all( uint8_t red, uint8_t green, uint8_t blue )
 {
-#if defined (RGB_BACKLIGHT_DZ60RGB)
 	IS31FL3733_set_color_all( red, green, blue );
-#endif
 }
 
 void backlight_set_key_hit(uint8_t row, uint8_t column)
@@ -302,43 +349,7 @@ void backlight_set_key_hit(uint8_t row, uint8_t column)
 	g_any_key_hit = 0;
 }
 
-#if !defined(RGB_BACKLIGHT_DZ60RGB)
-// This is (F_CPU/1024) / 20 Hz
-// = 15625 Hz / 20 Hz
-// = 781
-#define TIMER3_TOP 781
-
-void backlight_timer_init(void)
-{
-	static uint8_t backlight_timer_is_init = 0;
-	if ( backlight_timer_is_init )
-	{
-		return;
-	}
-	backlight_timer_is_init = 1;
-
-	// Timer 3 setup
-	TCCR3B = _BV(WGM32) | 			// CTC mode OCR3A as TOP
-			 _BV(CS32) | _BV(CS30); // prescale by /1024
-	// Set TOP value
-	uint8_t sreg = SREG;
-	cli();
-
-	OCR3AH = (TIMER3_TOP >> 8) & 0xff;
-	OCR3AL = TIMER3_TOP & 0xff;
-	SREG = sreg;
-}
-
-void backlight_timer_enable(void)
-{
-	TIMSK3 |= _BV(OCIE3A);
-}
-
-void backlight_timer_disable(void)
-{
-	TIMSK3 &= ~_BV(OCIE3A);
-}
-#else //STM32, use GPT with TIM4. Enable in halconf.h
+//STM32, use GPT with TIM4. Enable in halconf.h
 static void gpt_backlight_timer_task(GPTDriver *gptp);
 // Timer setup at 200Khz, callback at 10k ticks = 20Hz
 static GPTConfig gpt4cfg1 = {
@@ -360,7 +371,6 @@ void backlight_timer_disable(void)
 {
 	gptStopTimer(&GPTD4);
 }
-#endif //!defined(RGB_BACKLIGHT_HS60)
 
 void backlight_set_suspend_state(bool state)
 {
@@ -703,21 +713,6 @@ void backlight_effect_cycle_radial2(void)
 	}
 }
 
-#if defined(RGB_BACKLIGHT_M6_B)
-void backlight_effect_custom_colors(void)
-{
-	RGB rgb;
-	for ( uint8_t i = 0; i < 6; i++ )
-	{
-		HSV hsv = { .h = g_config.custom_color[i].h, .s = g_config.custom_color[i].s, .v = g_config.brightness };
-		rgb = hsv_to_rgb( hsv );
-		uint8_t led;
-		map_row_column_to_led( 0, i, &led );
-		backlight_set_color( led, rgb.r, rgb.g, rgb.b );
-	}
-}
-#endif
-
 void backlight_effect_indicators_set_colors( uint8_t index, HS color )
 {
 	HSV hsv = { .h = color.h, .s = color.s, .v = g_config.brightness };
@@ -795,11 +790,8 @@ void backlight_effect_indicators(void)
 	}
 }
 
-#if !defined(RGB_BACKLIGHT_DZ60RGB)
-ISR(TIMER3_COMPA_vect)
-#else //STM32 interrupt
+//STM32 interrupt
 static void gpt_backlight_timer_task(GPTDriver *gptp)
-#endif
 {
 	// delay 1 second before driving LEDs or doing anything else
 	static uint8_t startup_tick = 0;
@@ -856,11 +848,7 @@ static void gpt_backlight_timer_task(GPTDriver *gptp)
 			backlight_effect_solid_color();
 			break;
 		case 2:
-#if defined(RGB_BACKLIGHT_M6_B)
-			backlight_effect_custom_colors();
-#else
 			backlight_effect_alphas_mods();
-#endif
 			break;
 		case 3:
 			backlight_effect_gradient_up_down();
@@ -891,12 +879,12 @@ static void gpt_backlight_timer_task(GPTDriver *gptp)
 			break;
 	}
 
-	if ( ! suspend_backlight )
-	{
-#if !defined(RGB_BACKLIGHT_M6_B)
-		backlight_effect_indicators();
-#endif
-	}
+	/* if ( ! suspend_backlight ) */
+/* 	{ */
+/* #if !defined(RGB_BACKLIGHT_M6_B) */
+/* 		backlight_effect_indicators(); */
+/* #endif */
+/* 	} */
 }
 
 void backlight_set_indicator_index( uint8_t *index, uint8_t row, uint8_t column )
@@ -957,46 +945,12 @@ void backlight_config_set_value( uint8_t *data )
 	uint8_t *value_data = &(data[1]);
 	switch ( *value_id )
 	{
-#if defined (RGB_BACKLIGHT_ZEAL60) || defined(RGB_BACKLIGHT_ZEAL65)
-		case id_use_split_backspace:
-		{
-			g_config.use_split_backspace = (bool)*value_data;
-			reinitialize = true;
-			break;
-		}
-#endif
-#if defined (RGB_BACKLIGHT_ZEAL60)
-		case id_use_split_left_shift:
-		{
-			g_config.use_split_left_shift = (bool)*value_data;
-			reinitialize = true;
-			break;
-		}
 		case id_use_split_right_shift:
 		{
 			g_config.use_split_right_shift = (bool)*value_data;
 			reinitialize = true;
 			break;
 		}
-		case id_use_7u_spacebar:
-		{
-			g_config.use_7u_spacebar = (bool)*value_data;
-			reinitialize = true;
-			break;
-		}
-		case id_use_iso_enter:
-		{
-			g_config.use_iso_enter = (bool)*value_data;
-			reinitialize = true;
-			break;
-		}
-		case id_disable_hhkb_blocker_leds:
-		{
-			g_config.disable_hhkb_blocker_leds = (bool)*value_data;
-			reinitialize = true;
-			break;
-		}
-#endif
 		case id_disable_when_usb_suspended:
 		{
 			g_config.disable_when_usb_suspended = (bool)*value_data;
@@ -1079,16 +1033,6 @@ void backlight_config_set_value( uint8_t *data )
 				g_config.alphas_mods[i] = ( *(value_data+i*2) << 8 ) | ( *(value_data+i*2+1) );
 			}
 		}
-#if defined(RGB_BACKLIGHT_M6_B)
-		case id_custom_color:
-		{
-			uint8_t index = value_data[0];
-			if ( index >= 0 && index <= 6 )
-			{
-				_set_color( &(g_config.custom_color[index]), &(value_data[1]) );
-			}
-		}
-#endif
 	}
 
 	if ( reinitialize )
@@ -1216,16 +1160,6 @@ void backlight_config_get_value( uint8_t *data )
 				*(value_data+i*2+1)	= g_config.alphas_mods[i] & 0xFF;
 			}
 		}
-#if defined(RGB_BACKLIGHT_M6_B)
-		case id_custom_color:
-		{
-			uint8_t index = value_data[0];
-			if ( index >= 0 && index <= 6 )
-			{
-				_get_color( &(g_config.custom_color[index]), &(value_data[1]) );
-			}
-		}
-#endif
 	}
 }
 
@@ -1254,80 +1188,18 @@ void backlight_init_drivers(void)
 	// Initialize I2C
 	i2c_init();
 
-#if defined(RGB_BACKLIGHT_M6_B)
-	IS31FL3218_init();
-#elif defined(RGB_BACKLIGHT_DZ60RGB)
 	IS31FL3733_init( ISSI_ADDR_1 );
 
 	for ( int index = 0; index < BACKLIGHT_LED_COUNT; index++ )
 	{
-#if defined (HS60_ANSI)
 		bool enabled = !( ( index == 48-1 ) || //LA48
 						  ( index == 51-1 ) || //LA51
 						  ( index == 61-1 ) ); //LA61
-#elif defined (HS60_HHKB)
-		bool enabled = !( ( index == 61-1 ) || //LA61
-						  ( index == 62-1 ) ); //LA62
-#else //HS60_ISO
-		bool enabled = !( ( index == 51-1 ) || //LA51
-						  ( index == 61-1 ) ); //LA61
-#endif
 				// This only caches it for later
 		IS31FL3733_set_led_control_register( index, enabled, enabled, enabled );
 	}
 	// This actually updates the LED drivers
 	IS31FL3733_update_led_control_registers( ISSI_ADDR_1, ISSI_ADDR_2 );
-#else
-	IS31FL3731_init( ISSI_ADDR_1 );
-	IS31FL3731_init( ISSI_ADDR_2 );
-
-	for ( int index = 0; index < BACKLIGHT_LED_COUNT; index++ )
-	{
-		// OR the possible "disabled" cases together, then NOT the result to get the enabled state
-		// LC6 LD13 not present on Zeal65
-#if defined (RGB_BACKLIGHT_ZEAL65)
-		bool enabled = !( ( index == 18+5 && !g_config.use_split_backspace ) || // LB5
-						  ( index == 36+6 ) || // LC6
-						  ( index == 54+13 ) ); // LD13
-#elif defined (RGB_BACKLIGHT_KOYU)
-		bool enabled = !( ( index == 36+15 ) || // LC15
-						  ( index == 54+13 ) || // LD13
-						  ( index == 54+17 ) ); // LD17
-#elif defined (RGB_BACKLIGHT_M60_A)
-		bool enabled = !(
-		// LB6 LB7 LB8 LB15 LB16 LB17 not present on M60-A
-						  ( index == 18+6 ) || // LB6
-						  ( index == 18+7 ) || // LB7
-						  ( index == 18+8 ) || // LB8
-						  ( index == 18+15 ) || // LB15
-						  ( index == 18+16 ) || // LB16
-						  ( index == 18+17 ) || // LB17
-		// HHKB blockers (LC17, LD17) and ISO extra keys (LC15,LD13) not present on M60-A
-						  ( index == 36+17 ) || // LC17
-						  ( index == 54+17 ) || // LD17
-						  ( index == 36+15 ) || // LC15
-						  ( index == 54+13 ) ); // LD13
-#elif defined (RGB_BACKLIGHT_ZEAL60)
-		// LB6 LB7 LB8 LB15 LB16 LB17 not present on Zeal60
-		bool enabled = !( ( index == 18+5 && !g_config.use_split_backspace ) || // LB5
-						  ( index == 36+15 && !g_config.use_split_left_shift ) || // LC15
-						  ( index == 54+8 && !g_config.use_split_right_shift ) || // LD8
-						  ( index == 54+13 && g_config.use_7u_spacebar ) || // LD13
-						  ( index == 36+17 && g_config.disable_hhkb_blocker_leds ) || // LC17
-						  ( index == 54+17 && g_config.disable_hhkb_blocker_leds ) ||  // LD17
-						  ( index == 18+6 ) || // LB6
-						  ( index == 18+7 ) || // LB7
-						  ( index == 18+8 ) || // LB8
-						  ( index == 18+15 ) || // LB15
-						  ( index == 18+16 ) || // LB16
-						  ( index == 18+17 ) ); // LB17
-#endif
-		// This only caches it for later
-		IS31FL3731_set_led_control_register( index, enabled, enabled, enabled );
-	}
-	// This actually updates the LED drivers
-	IS31FL3731_update_led_control_registers( ISSI_ADDR_1, ISSI_ADDR_2 );
-#endif // !defined(RGB_BACKLIGHT_M6_B)
 
 	// TODO: put the 1 second startup delay here?
 

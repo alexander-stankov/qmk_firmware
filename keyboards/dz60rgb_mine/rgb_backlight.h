@@ -58,9 +58,6 @@ typedef struct
 	backlight_config_indicator layer_2_indicator;	// 3 bytes
 	backlight_config_indicator layer_3_indicator;	// 3 bytes
 	uint16_t alphas_mods[5];            // 10 bytes
-#if defined(RGB_BACKLIGHT_M6_B)
-	HS custom_color[6];                 // 12 bytes
-#endif
 } backlight_config;                // = 31 bytes (M6-B = 43 bytes)
 
 void backlight_config_load(void);
@@ -107,4 +104,3 @@ void backlight_color_2_sat_decrease(void);
 
 void backlight_test_led( uint8_t index, bool red, bool green, bool blue );
 void backlight_debug_led(bool state);
-

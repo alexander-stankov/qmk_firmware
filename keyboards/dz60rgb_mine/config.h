@@ -259,22 +259,6 @@ display
 // #define BOOTMAGIC_LITE_ROW 0
 // #define BOOTMAGIC_LITE_COLUMN 0
 
-// RGB_Matrix related
-#define RGB_DISABLE_AFTER_TIMEOUT 0  // number of ticks to wait until disabling effects
-#define RGB_DISABLE_WHEN_USB_SUSPENDED true  // turn off effects when suspended
-#define RGB_MATRIX_KEYPRESSES
-#define RGB_MATRIX_LED_PROCESS_LIMIT 4
-#define RGB_MATRIX_LED_FLUSH_LIMIT 26
-#define DISABLE_RGB_MATRIX_SPLASH
-#define DISABLE_RGB_MATRIX_MULTISPLASH
-#define DISABLE_RGB_MATRIX_SOLID_MULTISPLASH
-//TODO: this should be disabled i guess since we're using another implementation
-#define DRIVER_ADDR_1 0b1010000 //0x50
-#define DRIVER_ADDR_2 0b1010000  // this is here for compliancy reasons.
-#define DRIVER_COUNT 2
-#define DRIVER_1_LED_TOTAL 63
-#define DRIVER_LED_TOTAL DRIVER_1_LED_TOTAL
-
 /* VIA Configurator support(experimental) */
 #define DYNAMIC_KEYMAP_LAYER_COUNT 4
 
@@ -287,8 +271,13 @@ display
 // and avoid loading invalid data from the EEPROM
 #define EEPROM_VERSION 0x01
 #define EEPROM_VERSION_ADDR 34
+
+// Backlight config starts after EEPROM version
+#define RGB_BACKLIGHT_CONFIG_EEPROM_ADDR 35
+
 // Dynamic keymap starts after EEPROM version
-#define DYNAMIC_KEYMAP_EEPROM_ADDR 35
+#define DYNAMIC_KEYMAP_EEPROM_ADDR RGB_BACKLIGHT_CONFIG_EEPROM_ADDR + 32
+
 // Dynamic macro starts after dynamic keymaps (35+(4*10*6*2)) = (35+480)
 // calculated as (DYNAMIC_KEYMAP_EEPROM_ADDR + (DYNAMIC_KEYMAP_LAYER_COUNT *
 // MATRIX_ROWS * MATRIX_COLS * 2))
@@ -304,5 +293,62 @@ display
 #define DYNAMIC_KEYMAP_MACRO_COUNT 16
 
 #define RGB_BACKLIGHT_ENABLED 1
-// This conditionally compiles the backlight code for Zeal60 specifics
-#define RGB_BACKLIGHT_DZ60RGB
+
+// RGB_Matrix related
+#define RGB_DISABLE_AFTER_TIMEOUT 0  // number of ticks to wait until disabling effects
+#define RGB_DISABLE_WHEN_USB_SUSPENDED true  // turn off effects when suspended
+#define RGB_MATRIX_KEYPRESSES
+#define RGB_MATRIX_LED_PROCESS_LIMIT 4
+#define RGB_MATRIX_LED_FLUSH_LIMIT 26
+#define DISABLE_RGB_MATRIX_SPLASH
+#define DISABLE_RGB_MATRIX_MULTISPLASH
+#define DISABLE_RGB_MATRIX_SOLID_MULTISPLASH
+//TODO: this should be disabled i guess since we're using another implementation
+//#define DRIVER_ADDR_1 0b1010000 //0x50
+//#define DRIVER_ADDR_2 0b1010000  // this is here for compliancy reasons.
+#define DRIVER_COUNT 2
+#define DRIVER_1_LED_TOTAL 63
+#define DRIVER_LED_TOTAL DRIVER_1_LED_TOTAL
+
+// they aren't really used if RGB_BACKLIGHT_HS60 defined
+#define RGB_BACKLIGHT_USE_SPLIT_BACKSPACE 0
+#define RGB_BACKLIGHT_USE_SPLIT_LEFT_SHIFT 0
+#define RGB_BACKLIGHT_USE_SPLIT_RIGHT_SHIFT 0
+#define RGB_BACKLIGHT_USE_7U_SPACEBAR 0
+#define RGB_BACKLIGHT_USE_ISO_ENTER 0
+#define RGB_BACKLIGHT_DISABLE_HHKB_BLOCKER_LEDS 0
+
+// disable backlight when USB suspended (PC sleep/hibernate/shutdown)
+#define RGB_BACKLIGHT_DISABLE_WHEN_USB_SUSPENDED 0
+
+// disable backlight after timeout in minutes, 0 = no timeout
+#define RGB_BACKLIGHT_DISABLE_AFTER_TIMEOUT 0
+
+// the default brightness
+#define RGB_BACKLIGHT_BRIGHTNESS 255
+
+// the default effect (RGB test)
+#define RGB_BACKLIGHT_EFFECT 255
+
+// the default effect speed (0-3)
+#define RGB_BACKLIGHT_EFFECT_SPEED 0
+
+// the default color1 and color2
+#define RGB_BACKLIGHT_COLOR_1 { .h = 0, .s = 255 }
+#define RGB_BACKLIGHT_COLOR_2 { .h = 127, .s = 255 }
+
+// These define which keys in the matrix are alphas/mods
+// Used for backlight effects so colors are different for
+// alphas vs. mods
+// Each value is for a row, bit 0 is column 0
+// Alpha=0 Mod=1
+#define RGB_BACKLIGHT_ALPHAS_MODS_ROW_0 0b0010000000000001
+#define RGB_BACKLIGHT_ALPHAS_MODS_ROW_1 0b0000000000000001
+#define RGB_BACKLIGHT_ALPHAS_MODS_ROW_2 0b0010000000000001
+#define RGB_BACKLIGHT_ALPHAS_MODS_ROW_3 0b0010000000000001
+#define RGB_BACKLIGHT_ALPHAS_MODS_ROW_4 0b0011110000000111
+
+#define RGB_BACKLIGHT_CAPS_LOCK_INDICATOR { .color = { .h = 0, .s = 0 }, .index = 255 }
+#define RGB_BACKLIGHT_LAYER_1_INDICATOR { .color = { .h = 0, .s = 0 }, .index = 255 }
+#define RGB_BACKLIGHT_LAYER_2_INDICATOR { .color = { .h = 0, .s = 0 }, .index = 255 }
+#define RGB_BACKLIGHT_LAYER_3_INDICATOR { .color = { .h = 0, .s = 0 }, .index = 255 }

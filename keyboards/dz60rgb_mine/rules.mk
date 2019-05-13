@@ -1,3 +1,9 @@
+# project specific files
+SRC =	rgb_backlight.c \
+		drivers/issi/is31fl3733.c \
+		quantum/color.c \
+		drivers/arm/i2c_master.c
+
 ## chip/board settings
 #   the next two should match the directories in
 #   <chibios>/os/hal/ports/$(MCU_FAMILY)/$(MCU_SERIES)
@@ -36,18 +42,18 @@ DFU_ARGS = -d 0483:df11 -a 0 -s 0x08000000:leave
 DFU_SUFFIX_ARGS = -p DF11 -v 0483
 
 BACKLIGHT_ENABLE = no
-BOOTMAGIC_ENABLE = lite            # Virtual DIP switch configuration
-MOUSEKEY_ENABLE = no               # Mouse keys
-EXTRAKEY_ENABLE = yes              # Audio control and System control
-CONSOLE_ENABLE = yes                # Console for debug
-COMMAND_ENABLE = no                # Commands for debug and configuration
-#SLEEP_LED_ENABLE = yes            # Breathing sleep LED during USB suspend
-NKRO_ENABLE = no                 # USB Nkey Rollover
-AUDIO_ENABLE = no
-RGB_MATRIX_ENABLE = IS31FL3733     # Use RGB matrix
-NO_USB_STARTUP_CHECK = no          # Disable initialization only when usb is plugged in
-RGBLIGHT_ANIMATIONS = no
-VELOCIKEY_ENABLE = no
+BOOTMAGIC_ENABLE = lite     	# Virtual DIP switch configuration
+MOUSEKEY_ENABLE = no        	# Mouse keys
+EXTRAKEY_ENABLE = yes       	# Audio control and System control
+CONSOLE_ENABLE = yes  			# Console for debug
+COMMAND_ENABLE = no             # Commands for debug and configuration
+SLEEP_LED_ENABLE = no           # Breathing sleep LED during USB suspend
+NKRO_ENABLE = yes               # USB Nkey Rollover
+AUDIO_ENABLE = no 				#enable midi
+#RGB_MATRIX_ENABLE = IS31FL3733  # Use RGB matrix
+NO_USB_STARTUP_CHECK = no       # Disable initialization only when usb is plugged in
+RGBLIGHT_ANIMATIONS = no 		#enable RGB animations
+VELOCIKEY_ENABLE = no 			#change rgb_animations speed based on wpm
 
 # Enable Via Configurator
 RAW_ENABLE = yes
