@@ -37,7 +37,7 @@
 #include "quantum/color.h"
 
 #include "drivers/issi/is31fl3733.h"
-#define BACKLIGHT_LED_COUNT 63
+#define BACKLIGHT_LED_COUNT DRIVER_LED_TOTAL
 
 #define BACKLIGHT_EFFECT_MAX 10
 
@@ -84,7 +84,7 @@ uint32_t g_any_key_hit = 0;
 #define ISSI_ADDR_1 0x50
 #define ISSI_ADDR_2 0x50
 
-const is31_led g_is31_leds[DRIVER_LED_TOTAL] =
+const is31_led g_is31_leds[BACKLIGHT_LED_COUNT] =
 {
     {0, K_14,   J_14,   L_14},//BACKSPACE
     {0, K_13,   J_13,   L_13},//=
@@ -155,7 +155,7 @@ const is31_led g_is31_leds[DRIVER_LED_TOTAL] =
     {0, K_16,   J_16,   L_16},//LCTL
 };
 
-//const is31_led g_is31_leds[DRIVER_LED_TOTAL] = {
+//const is31_led g_is31_leds[BACKLIGHT_LED_COUNT] = {
 /* Refer to IS31 manual for these locations
  *   driver
  *   |  R location

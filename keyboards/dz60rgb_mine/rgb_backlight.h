@@ -58,7 +58,7 @@ typedef struct
 	backlight_config_indicator layer_2_indicator;	// 3 bytes
 	backlight_config_indicator layer_3_indicator;	// 3 bytes
 	uint16_t alphas_mods[5];            // 10 bytes
-} backlight_config;                // = 31 bytes (M6-B = 43 bytes)
+} backlight_config;                // = 31 bytes
 
 void backlight_config_load(void);
 void backlight_config_save(void);
